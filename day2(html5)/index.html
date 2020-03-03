@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style>
+		#drag,
+		#drag2 {
+			display: inline-block;
+			width: 200px;
+			height: 200px;
+			border: 1px solid black;
+			margin-right: 20px;
+		}
+		img {
+			width: 200px;
+			height: 200px;
+
+		}
+	</style>
+</head>
+<body>
+	<div id="drag" ondragover="dragover(event)" ondrop="drop(event)">	
+
+	</div>
+	<div id="drag2" ondragover="dragover(event)" ondrop="drop(event)">	</div>
+	<img id='img' ondragstart="drag(event)" draggable="true" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1583227880873&di=0bb7afd299ece800bc618041285621a9&imgtype=0&src=http%3A%2F%2Fa0.att.hudong.com%2F78%2F52%2F01200000123847134434529793168.jpg">
+	<button onclick="getLocation()">获取地理定位</button>
+	<button onclick="watchPosition()">监听地理位置</button>
+	<canvas id="canvas" width="500" height="500"></canvas>
+	<script type="text/javascript">
+		//获取地理位置
+		function getLocation() {
+			if(navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition((position)=>{
+					document.write(JSON.stringify(position));
+					console.log(position);
+				});
+			}else {
+				document.write("不支持地理定位");
+			}
+		}
+		function watchPosition(){
+			if(navigator.geolocation) {
+				navigator.geolocation.watchPosition((position)=>{
+					document.write(JSON.stringify(position))
+					console.log(position);
+				});
+			}else {
+				document.write("不支持地理定位监听");
+			}
+		}
+		//拖放
+		function drag(event) {
+			event.dataTransfer.setData('id',event.currentTarget.id);
+		}
+		function dragover(event){
+			event.preventDefault();
+		}
+		function drop(event) {
+			event.preventDefault();
+			var id = event.dataTransfer.getData('id');
+			var img = document.querySelector(`#${id}`);
+			event.currentTarget.appendChild(img);
+		}
+		//canvas绘制
+		function MyCanvas(){
+			this.c = null;//canvas对象
+			this.ctx = null;//上下文对象
+			this.init = function(id){
+				var c = document.querySelector(`#${id}`);
+				var ctx = c.getContext('2d');
+				this.c = c;
+				this.ctx = ctx;
+				console.log("canvas上下文对象创建成功");
+			}
+		}
+		//绘制矩形
+		MyCanvas.prototype.drawRect = function(color,x,y,width,height){
+			var ctx = this.ctx;
+			// var grd = ctx.createLinearGradient(0,0,100,0);
+			var grd = ctx.createRadialGradient(75,50,5,90,60,100);
+			grd.addColorStop(0, 'yellow');
+			grd.addColorStop(1, 'red');
+			ctx.fillStyle = grd;
+			ctx.fillRect(x,y,width,height);
+		}
+		//绘制线条
+		MyCanvas.prototype.drawLine = function(startX,startY,endX,endY) {
+			var ctx = this.ctx;
+			ctx.moveTo(startX,startY);
+			ctx.lineTo(endX,endY);
+			ctx.stroke();
+		}
+		//绘制圆形
+		MyCanvas.prototype.drawArc = function(x,y,r,start,stop) {
+			var ctx = this.ctx;
+			ctx.beginPath();
+			ctx.arc(x,y,r,start,stop);
+			ctx.stroke();
+		}
+		//绘制字体
+		MyCanvas.prototype.drawText = function(type,font,text, x, y) {
+			var ctx = this.ctx;
+			ctx.font = font;
+			if(type === 'fill') {//实心字体
+				ctx.fillText(text, x, y);
+			}else {//空
+				ctx.strokeText(text, x, y);
+			}
+			
+		}
+		//图像
+		MyCanvas.prototype.drawImg = function(img, x, y) {
+			var ctx = this.ctx;
+			var image = new Image();
+			image.src = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1583227880873&di=0bb7afd299ece800bc618041285621a9&imgtype=0&src=http%3A%2F%2Fa0.att.hudong.com%2F78%2F52%2F01200000123847134434529793168.jpg";
+			image.onload = function(){
+				console.log('图片加载完毕');
+				ctx.drawImage(image, x, y);
+			}
+			
+		}
+		var canvas = new MyCanvas();
+		canvas.init("canvas");
+		// canvas.drawRect('green',0,0,200,100);
+		// canvas.drawLine(0,0,200,500);
+		// canvas.drawArc(150,100,100,0,2*Math.PI);
+		// canvas.drawText('', '30px Arial', '绘制字体', 200, 200);
+		// canvas.drawImg("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1583227880873&di=0bb7afd299ece800bc618041285621a9&imgtype=0&src=http%3A%2F%2Fa0.att.hudong.com%2F78%2F52%2F01200000123847134434529793168.jpg",100,100);
+	</script>
+</body>
+</html>
