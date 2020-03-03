@@ -123,3 +123,59 @@ html5地理定位:
 	watchPosition: 返回用户当前位置,并继续返回用户移动时的更新位置,如同汽车上的GPS
 
 	clearWatch: 停止watchPosition的方法
+
+html5video:
+	属性:
+		paused: 是否暂停
+		width: 宽度
+
+	方法:
+		play: 播放
+		pause: 暂停
+
+html5 audio：
+	control属性供添加播放、暂停和音量控件
+
+html5 input类型:
+	不支持的话会显示为文本域
+	color: 用于选色
+	date: 允许从一个日期选择器选择一个日期
+	datetime: 选择一个日期和时间(UTC时间)
+	datetime-local: 选择一个日期和时间
+	email: 用于应该包含emial的输入域,提交表单时会自动验证
+	month: 选择月和年
+	number: 数字输入域,可以设置min和max属性限制数字的输入,step设置数字间隔,value默认值
+	range: 用于包含一定范围内的数字值输入域,显示为滑动条
+	search: 用于搜索域
+	tel: 定义输入电话号码字段
+	time: 选择一个时间
+	url: 用于包含url地址的输入域,提交表单时会自动验证url域的值
+
+html5 表单元素
+	datalist: 规定输入域的选项列表,规定form或input域应该拥有自动完成功能
+
+	keygen: 作用是提供一种验证用户的可靠方法,规定用于表单的密钥对生成器字段;当提交表单时,会生成两个键,一个私钥,一个公钥
+	,私钥存储于客户端,公钥则被发送到服务器,公钥可用于之后验证用户的客户端证书 
+
+	output元素: 用于不同类型的输出,比如计算或脚本输出
+
+html5 表单属性
+	
+	autocomplete: 规定form或input域拥有自动完成功能,on是打开,off是关闭
+	novalidate: 规定在提交表单时不验证form或input域
+
+	autofocus: 是一个boolean属性,规定在页面加载时,域自动的获得焦点
+	form: 规定输入域所在的一个或多个表单,需引用一个以上表单,使用空格分隔
+	formaction: 会覆盖form元素中的action属性
+	formenctype: 描述表单提交到服务器的数据编码(只对form表单中,method="post"表单),覆盖表单中的enctype属性
+
+	formmethod: 定义表单提交的方式,覆盖表单中的method属性,可与type="submit",type="image"配合使用
+	formtarget: 指定一个名称或找一个关键字来指明表单提交数据接收后的展示,覆盖form的target属性,可与submit和image配合使用
+	height和width: 规定用于image类型的input标签图像的高度和宽度
+	list: 规定输入域的datalist
+	min和max: min、max、step属性用于为把包含数字或日期的input类型规定限定
+	multiple: 是一个boolean值,规定input元素中可以选择多个值,适用于emial、file等
+	pattern: 描述了一个正则表达式用于验证input元素的值
+	placeholder: 提供一种提示(hint),描述输入域的期待值
+	required： 一个boolean值,规定不能为空
+	step: 为输入域规定的合法数字间隔

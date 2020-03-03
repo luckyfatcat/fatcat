@@ -3,6 +3,9 @@
 <head>
 	<title></title>
 	<style>
+		body > div {
+			margin-bottom: 20px;
+		}
 		#drag,
 		#drag2 {
 			display: inline-block;
@@ -10,6 +13,9 @@
 			height: 200px;
 			border: 1px solid black;
 			margin-right: 20px;
+		}
+		#form_element > input {
+			display: block;
 		}
 		img {
 			width: 200px;
@@ -19,15 +25,89 @@
 	</style>
 </head>
 <body>
-	<div id="drag" ondragover="dragover(event)" ondrop="drop(event)">	
-
+	<div>
+		表单属性
+		<form id="form1" method="get" action="/test.js">
+			<input autocomplete="on" type="search" name="">
+			<input type="submit" name="" onclick="submitTest(event)">
+			<input type="week" name="">
+		<!-- 	<input type="image" name="" src="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1127089551,1776911506&fm=26&gp=0.jpg"> -->
+		</form>
+		<input type="text" autocomplete="off" name="username" form="form1">
 	</div>
-	<div id="drag2" ondragover="dragover(event)" ondrop="drop(event)">	</div>
-	<img id='img' ondragstart="drag(event)" draggable="true" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1583227880873&di=0bb7afd299ece800bc618041285621a9&imgtype=0&src=http%3A%2F%2Fa0.att.hudong.com%2F78%2F52%2F01200000123847134434529793168.jpg">
+	<div>
+		input类型<br/>
+		<form  id="form_element">
+			color: <input type="color" name="">
+			日期: <input type="date" name="">
+			UTC时间: <input type="datetime" name="">
+			日期和时间: <input type="datetime-local" name="">
+			e-mail: <input type="emial" name="">
+			月和年: <input type="month" name="">
+			数字: <input type="number" name="" min="5" max="99">
+			范围: <input type="range" min="1" max="100" name="">
+			搜索: <input type="search" name="">
+			电话: <input type="tel" name="">
+			时间: <input type="time" name="">
+			url: <input type="url" name="">
+			<input type="submit" name="" value="提交">
+		</form>
+	</div>
+	<div>
+		表单元素<br/>
+		<form >
+			datalist: 
+			<input list="lg" name="">
+			<datalist id="lg">
+				<option>javascript</option>
+				<option>python</option>
+				<option>java</option>
+				<option>ruby</option>
+				<option>c</option>
+			</datalist>
+			加密: <keygen name="security" />
+			<input type="submit" name="">
+		</form>
+		<form oninput="x.value=parseInt(a.value) + parseInt(b.value)">
+			
+			0 <input id="a" type="range" name="" vlaue="50">
+			100
+			+<input id="b" type="number" name="" value="50">
+			= <output name="x" for="a b"></output>
+		</form>
+	</div>
+
+	<div>
+		视频<br/>
+		<video width="300">
+		 <source src="https://www.w3cschool.cn/statics/demosource/mov_bbb.mp4" type="video/mp4">
+		</video>
+	</div>
+	<div>
+		音频<br/>
+		<audio controls>
+			<source src="https://www.w3cschool.cn/statics/demosource/horse.ogg" type="audio/ogg">
+		</audio>
+	</div>
+	
+	<div>
+		拖放图片<br/>
+		<div id="drag" ondragover="dragover(event)" ondrop="drop(event)">	
+
+		</div>
+		<div id="drag2" ondragover="dragover(event)" ondrop="drop(event)">	</div>
+		<img id='img' ondragstart="drag(event)" draggable="true" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1583227880873&di=0bb7afd299ece800bc618041285621a9&imgtype=0&src=http%3A%2F%2Fa0.att.hudong.com%2F78%2F52%2F01200000123847134434529793168.jpg">
+	</div>
 	<button onclick="getLocation()">获取地理定位</button>
 	<button onclick="watchPosition()">监听地理位置</button>
 	<canvas id="canvas" width="500" height="500"></canvas>
 	<script type="text/javascript">
+		//提交表单
+		function submitTest() {
+			var form = document.querySelector("#form1");
+			console.log(form);
+			// event.preventDefault();
+		}
 		//获取地理位置
 		function getLocation() {
 			if(navigator.geolocation) {
