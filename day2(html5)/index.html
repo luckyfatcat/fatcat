@@ -34,7 +34,7 @@
 				navigator.geolocation.getCurrentPosition((position)=>{
 					document.write(JSON.stringify(position));
 					console.log(position);
-				});
+				},error=>{document.write(JSON.stringify(error));});
 			}else {
 				document.write("不支持地理定位");
 			}
