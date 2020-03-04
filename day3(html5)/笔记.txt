@@ -14,3 +14,56 @@ html5 web workers： 运行在后台的javascript,不会影响页面的性能。
 		w.terminate();
 web worker位于外部文件,无法访问windown
 对象、document对象、parent对象
+
+html5 sse: 服务器发送事件(server-sent-events)
+	基于web socket协议的一种服务器向客户端发送事件和数据的单向通讯,允许网页获得来自服务器的更新
+
+	单向消息传递:
+		指的是网页自动获取来自服务器的更新
+
+	eventSource对象用于接收服务器发送事件通知:
+	创建一个新的eventSource对象,规定发送更新的页面URL:
+	var source = new EventSource("demo.php");
+
+	每一次接收到更新都会触发onmessage事件
+	source.onmessage = function(event) {
+		var data = event.data;
+	}
+	其他事件:
+		onopen: 当通往服务器连接被打开
+		onerror: 当发生错误
+	服务器端代码:
+		把"Content-Type"报头设置为"text/event-stream"
+		php中: flush();
+		asp中: Response.Flush();//向网页刷新输出数据
+
+html5 webSocket: 提供的一种在单个TCP连接上进行全双共通讯的协议;浏览器和服务器只需要做一个握手的动作,然后浏览器和服务器就形成了一条快速通道,两者之间就直接开始数据互相传送
+
+浏览器通过js向服务器发出建立webSocket连接的请求,连接建立以后,客户端和服务器端就可以通过TCP连接直接交换数据
+
+当获取webSocket连接后,通过send()向服务器阿松数据,通过onmessage事件来接收服务器返回的数据
+	
+	创建: 第一个参数url是指定连接的url,第二个参数是可选的,指定可接收的子协议
+		var socket = new WebSocket(url, [protocal])
+
+	属性:
+		readyState: 连接状态
+			0 - 连接尚未建立
+			1 - 连接已建立,可以进行通信
+			2 - 连接正在进行关闭
+			3 - 连接已经关闭或者连接不能打开
+
+		bufferedAmount: 只读属性bufferedAmount已被send()放入正在队列中等待传输,但是还没有发出的UTF-8文本字节数
+
+	事件:
+		onopen: 连接建立时触发
+		onmessge: 客户端接收服务端数据时触发
+		onerror:  通信发生错误时
+		onclose:  连接关闭
+
+	方法:
+		send: 使用连接发送数据
+		close: 关闭连接
+
+websocket本质上市一个基于tcp的协议：
+	为了建立一个websocket连接,客户端浏览器首先要向服务器发起一个http请求,这个请求和通常http请求不同,包含了一些附加头信息,其中附加头信息"Upgrade:WebSocket"表明是一个申请协议升级的http请求,服务器端解析这些附加的头信息然后产生应答信息返回给客户端,客户端和服务器端的webSocket连接就建立起来了,双方就可以通过这个链接通道自由的传递消息,并且这个连接会持续存在直到客户端或者服务器端的某一方主动关闭了连接

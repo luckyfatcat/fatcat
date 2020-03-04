@@ -2,12 +2,53 @@
 <html>
 <head>
 	<title></title>
+	<style type="text/css">
+		#receive {
+			width: 200px;
+			height: 200px;
+			border: 1px solid black;
+			padding: 20px;
+		}
+	</style>
 </head>
 <body>
+	<div>
+		webSocket<br/>
+		接收id:<input id="target" type="" name=""><br/>
+		发送消息:<input id="text" type="text" name=""><br/>
+		接收消息:<p id="receive"></p>
+		<button onclick="openSocket()">打开链接</button>
+		<button onclick="sendSocket()">发送消息</button>
+		<button onclick="closeSocket()">关闭连接</button>
+	</div>
 	<p id="msg"></p>
 	<button onclick="startCount()">计数</button>
 	<button onclick="stopCount()">停止</button>
 	<script type="text/javascript">
+		//web socket
+		var socket;
+		var text = document.querySelector("#text");//发送消息
+		var target = document.querySelector("#target");//目标
+		var receive = document.querySelector('#receive');
+		function openSocket() {
+			socket = new WebSocket("ws://192.168.1.107:3000");
+			socket.onmessage = function(event) {
+				var data = event.data;
+				receive.innerHTML = data;
+				console.log('服务端消息:',data);
+			}
+		}
+		function sendSocket() {
+			var msg = text.value || "发送消息";
+			var targetId = target.value || 1;
+			console.log("发送消息")
+			socket.send(JSON.stringify({msg: msg,targetId: targetId}));
+		}
+		function closeSocket() {
+			socket.close();
+			console.log("关闭连接")
+		}
+		//web worker
 		var w;
 		var p = document.querySelector('#msg');
 		function startCount(){
