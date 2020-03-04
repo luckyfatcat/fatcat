@@ -1,0 +1,16 @@
+html5 web workers： 运行在后台的javascript,不会影响页面的性能。可以使用web worker提供的一种简单的方法来为web内容在后台线程中运行脚本,这些线程在执行任务的过程中并不会干扰用户界面
+当在html页面中执行脚本时,页面的状态是不可响应的,直到脚本已完成。web worker独立于其他脚本,不会影响页面的性能;通常用于更耗费CPU资源的任务
+
+	创建一个外部js文件创建web worker
+	创建新的web worker对象:
+		var w = new Worker('worker.js');
+	发送消息:
+		postMessage();
+	接收消息:
+		w.onmessage = function(event) {
+			var data = event.data;
+		}
+	终止:
+		w.terminate();
+web worker位于外部文件,无法访问windown
+对象、document对象、parent对象
