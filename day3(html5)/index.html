@@ -31,7 +31,7 @@
 		var target = document.querySelector("#target");//目标
 		var receive = document.querySelector('#receive');
 		function openSocket() {
-			socket = new WebSocket("ws://192.168.1.107:3000");
+			socket = new WebSocket("ws://rapzmz.natappfree.cc");
 			socket.onmessage = function(event) {
 				var data = event.data;
 				receive.innerHTML = data;
