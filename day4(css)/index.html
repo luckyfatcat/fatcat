@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		.rtl {
+			direction: rtl;
+		}
+		.link:link {
+			color: blue;
+		}
+		.link:visited {
+			color: yellow;
+		}
+		.link:hover {
+			color: green;
+		}
+		.link:active {
+			color: red;
+		}
+		table {
+			width: 100%;
+			border-collapse: collapse;
+		}
+		table,
+		th,
+		td {
+			border: 1px solid black;
+		}
+		th {
+			height: 40px;
+		}
+		td {
+			text-align: center;
+			padding: 5px;
+			background-color: darkgrey;
+			color: white;
+		}
+		.clip_img {
+			position: absolute;
+			overflow: visible;
+			clip: rect(0,400px,300px,0);
+			width: 400px;
+
+		}
+		q:lang(no) {
+			quotes: "@" "@";
+		}
+	</style>
+</head>
+<body>
+	<section>
+		<h3>伪类</h3>
+		<q lang='no'>lang伪类</q>
+	</section>
+	<section style="position:relative;height: 400px;">
+		<h3>clip裁剪</h3>
+		<img class="clip_img" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1583389603553&di=c909a25eb78386344cb87c3051d3a622&imgtype=0&src=http%3A%2F%2Fa0.att.hudong.com%2F78%2F52%2F01200000123847134434529793168.jpg">
+	</section>
+	<section>
+		<h3>表格</h3>
+		<table>
+			<tr>
+				<th>序号</th>
+				<th>姓名</th>
+				<th>年纪</th>
+			</tr>
+			<tr>
+				<td>1</td>
+				<td>王大侠</td>
+				<td>29</td>
+			</tr>
+		</table>
+	</section>
+	<section>
+		<h3>文本方向</h3>
+		<p class='ltr'>文字默认方向,从左到右</p>
+		<p class="rtl">文字从右到左</p>
+	</setion>
+	<section>
+		<h3>链接</h3>
+		<a class="link" href="http://wwww.baidu.com" target="_blank">链接</a>
+	</section>
+
+</body>
+</html>

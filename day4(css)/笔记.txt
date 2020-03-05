@@ -1,0 +1,138 @@
+css背景:
+	background-color不能继承,默认值是transparent
+	backgrround-position: 设置图像的起始位置
+	水平方向和垂直方向
+	background-attachment: 背景图像是否固定或者随页面其余部分滚动;(fixed,scroll,local-随滚动元素滚动)
+
+	使用简写的顺序:
+	background-color
+	background-image
+	background-repeat
+	background-attachment
+	background-position
+
+css文本:
+	text-align-文本对齐方式:
+		justify: 两端对齐,每一行左右外边距对齐 
+
+	text-transform-文本转换,转换大小写或者首字母大写
+		uppercase: 大写
+		lowercase: 小写
+		capitalize: 首字母大写
+
+	direction-设置文本方向/书写方向
+		ltr: 默认,左到右
+		rtl: 右到左
+
+	unicode-bidi:与direction一起使用,来设置或返回文本是否被重写
+		normal
+		embed: 创建一个附加的嵌入层面
+		bidi-override: 创建一个附加的嵌入层面,重新排序取决于direction属性
+
+	line-height: 设置行间距
+		number: 设置数字,此数字会与当前的字体尺寸相乘来设置
+		length: 设置固定的值
+		%: 基于当前字体尺寸百分比的行间距
+
+	vertical-align: 设置一个元素的垂直对齐
+		baseline: 默认,元素放置到父元素的基线上
+		sub: 垂直对齐文本的上标
+		super: 垂直对齐文本的下标
+		top: 把元素顶端与行中最高元素的顶端对齐
+		text-top: 把元素顶端与父元素字体的顶端对齐
+		middle: 把元素放在父元素的中部
+		bottom: 把元素的顶端与行中最低的元素的顶端对齐
+		text-bottom: 把元素的底端与父元素字体的底端对齐
+		%: 使用line-height属性的百分比来排列此元素,允许负值
+
+	white-space: 指定元素内的空白怎样处理
+		normal: 默认,空白会被浏览器忽略
+		pre: 空白会被保留,类似pre标签
+		nowrap: 文本不会换行,知道遇到br标签
+		pre-wrap: 保留空白序列,正常进行换行
+		pre-line: 合并空白序列,保留换行符
+
+css font:
+	简写顺序,font-size和font-family必需:
+	font-style: 规定字体样式,正常或斜体、倾斜
+	font-variant: 规定字体异体(small-caps:小型大写字母)
+	font-weight
+	font-size/line-height
+	font-family
+
+css 链接(link)：四个状态
+	a:hover必须在a:link和a:visited之后,a-active必须在a:hover之后
+
+	a:link - 正常,未访问过的链接
+	a:visited - 用户已访问过的链接
+	a:hover - 当用户鼠标放在链接上时
+	a:active - 链接被点击那一刻
+
+css 列表样式:
+	list-style-image:设置列表样式图像属性;但是在浏览器中显示不同
+		ulr();
+	list-style-position: 确定标志出现在列表内容之外还是内部
+
+	list缩写属性:
+	list-style:	list-style-type list-style-position list-style-image
+
+css 表格:
+	
+	border-collapse: collapse;设置表格边框是否折叠成一个单一的边框或隔开
+
+css padding: 不能使用负值
+	padding的百分比是相对于其父元素的width计算的
+
+css 分组和嵌套:
+	分组: 将具有相同样式的选择器进行分组,减少代码量
+	嵌套: 适用于选择器内部的选择器的样式
+
+内联元素设置display为block,是不允许有它内部的嵌套块元素
+
+css 定位position:
+	fixed: 相对于浏览器窗口定位,ie7和8下需要描述!DOCTYPE才能支持
+
+clip: 裁剪一张图像,有overflow:'visible'时无效(测试有误,任然有效),需要绝对定位
+	rect(top, right, bottom, left)
+
+css float 浮动: 定义元素在哪个方向浮动,浮动元素会产生一个块级框,直到该块级框的外边缘碰到包含框或者其他浮动框为止
+	
+	一个浮动元素会尽量的向左或向右移动,直到碰到包含框或者其他浮动框;浮动元素之后的元素将围绕它;之前的元素不受影响
+
+	元素浮动后,周围的元素会重新排列,为了避免这种情况,使用clear属行
+	clear指定元素两侧不能出现浮动元素
+
+css组合选择符
+	css3中包含四种组合方式:
+		1.后代选择器(空格间隔)
+		2.子元素选择器(大于号间隔)
+		3.相邻兄弟选择器(加号间隔)
+		4.普通兄弟选择器(波浪号间隔)
+
+css 伪类/伪元素: 用来添加一些选择器的特殊效果
+	伪类: 特定的状态可以触发伪类样式,状态改变又失去样式
+	伪元素: 基于元素的抽象,不存在文档中
+	伪类:
+	
+	:lang - 使你有能力为不同的语言定义特殊的规则
+	:focus - 选择具有焦点的元素
+
+	伪元素:
+	:first-child - 选择元素的第一个子元素
+	:first-letter - 选择第一个字母
+	:first-line - 选择第一行
+	:before - 选定元素前插入内容
+	:after - 选定元素后插入内容
+
+css 媒体类型
+ @media: 规定允许在相同样式表为不同媒体设置不同的样式
+ 	all - 所有媒体设备
+ 	screen - 电脑显示器
+ 	print - 打印机
+
+ css 属性选择器:
+ 	包含指定值的属性,使用~分隔属性和值
+ 	[title~=hi]
+
+ 	包含指定值的属性,连词符也可,使用|分隔属性和值
+ 	[title|=hi]
