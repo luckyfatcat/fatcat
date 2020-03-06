@@ -1,0 +1,65 @@
+css3是css技术的升级版本,css3语言开发是朝向模块化发展的;css3是最新的css标准
+
+css3 边框:
+	可以创建圆角边框、添加阴影框
+
+	box-shadow： 水平阴影位置,可负值  垂直阴影位置,可负值 模糊距离 阴影大小 阴影颜色  外阴影/内阴影;添加阴影
+
+	border-image:  ;边界图片,指定一个图片作为边框
+
+	border-radius: 圆角
+		border-top-left-radius: 左上
+		border-bottom-right-radius: 右下
+
+css3 背景
+	background-image: 添加背景图,不同背景图和图像用逗号隔开,所有图片中显示在最顶端的为第一张
+
+	background-size: 指定背景图的大小
+
+	background-origin: 指定背景图像的位置区域
+
+	background-clip: 指定位置开始绘制
+
+css3 渐变: 在两个或多个指定颜色之间显示平稳的过渡
+	
+	线性渐变:
+	background: linear-gradient(direction, color-stop1, color-stop2, ...)
+	重复线性渐变: repeating-linear-gradient
+
+	径向渐变: 
+	radial-gradient(center, shape size, start-color,...,last-color)
+
+
+css3 字体
+	自定义字体:
+	@font-face {
+		font-family: '';
+		src: ''
+	}
+
+css3 2d转换(移动、比例化、旋转、拉伸)
+	方法:
+	scale(): 增加或减少的大小,取决于宽度和高度的参数
+
+	skew(): 两个参数,x轴和y轴倾斜的角度;第二个参数为空则默认为0,参数为负数则向相反方向倾斜
+	skewX() x轴倾斜
+	skewY() y轴倾斜
+
+	matrix(): 参数有六个,包括: 旋转、缩放、平移、倾斜
+
+css3 3d转换
+	分别增加了X、Y、Z方向
+	perspective: 设置从何处查看元素的角度
+
+css3 过渡
+	transition: 四个值
+	1.transition-property: css属性名称
+	2.transition-duration: 过渡花费时间,默认0
+	3.transition-timing-function:指定切换效果的速度
+		linear: 相同速度
+		ease: 慢速开始,变快,慢速结束
+		ease-in: 慢速开始
+		ease-out: 慢速结束
+		ease-in-out: 慢速开始和结束
+		cubi-bezier(n,n,n,n): 自定义,n为0-1的数值
+	4.transition-delay: 效果开始时间,默认0

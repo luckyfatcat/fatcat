@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta name="viewport" content="width=device-width,inital-scale=1.0"	 >
+	<style type="text/css">
+	 	* {
+	 		box-sizing: border-box;
+	 	}
+		[class^=col] {
+			float: left;
+			padding: 5px;
+			border: 1px solid black;
+		}
+		.row:after {
+			content: "";
+			clear: both;
+		}
+		.col-2 {
+			width: 8.33%;
+		}
+		.col-4 {
+			width: 16.66%;
+		}
+		.col-8 {
+			width: 33.33%;
+		}
+		.col-16 {
+			width: 66.66%;
+		}
+		.col-24 {
+			width: 100%;
+		}
+		@media only screen and (max-width: 500px) {
+			body {
+				background: lightblue;
+			}
+		}
+		@media only screen and (orientation: landscape) {
+			body {
+				background: darkgrey;
+			}
+		}
+		@media only screen and (max-width: 768px) {
+			[class^=col] {
+				width: 100%;
+			}
+		}
+		/*选择器*/
+		/*普通兄弟选择器*/
+		.selector h4~p {
+			color: blue;
+		}
+		/*两端对齐*/
+		.justify {
+			text-align: justify;
+			width: 200px;
+		    height: 40px;
+		    line-height: 40px;
+		    border: 1px solid black;
+		}
+		.justify > span {
+			display: inline-block;
+			padding-left: 100%;
+		}
+	</style>
+</head>
+<body>
+	<section>
+		<h3>文字两端对齐</h3>
+		<p class="justify">刘 德 华<span></span></p>
+		<p class="justify">中 文 两 端 对 齐<span></span></p>
+	</section>
+	<section class="selector">
+		<h3>选择器</h3>
+		<div>
+			<h4>普通兄弟选择器</h4>
+			<p>我是第一段</p>
+			<p>我是第二段</p>
+			<span>我是span的第一段</span>
+			<p>我是第三段</p>
+		</div>
+	</section>
+	<section>
+		<h3>图片,picture元素</h3>
+		<picture>
+			<source srcset="https://www.w3cschool.cn/statics/images/course/img_flowers.jpg"  media="(max-width: 400px)">
+				<source srcset="https://www.w3cschool.cn/statics/images/course/img_smallflower.jpg">
+					    <img src="" style="width:auto;">
+
+		</picture>
+	</section>
+	<input type="text" name="">
+	<a href="http://www.baidu.com">百度</a>
+	<section>
+		<h3>网格视图(24格)</h3>
+		<div class="row">
+			<div class="col-8">menu</div>
+			<div class="col-16">main</div>
+		</div>
+		<div class="row">
+			<div class="col-4">content</div>
+			<div class="col-4">content</div>
+			<div class="col-16">main</div>
+		</div>
+	</section>
+	<section>
+		<h3>测试viewport</h3>
+		<img src="https://www.w3cschool.cn/statics/demosource/img_chania.jpg">
+			<p>
+		Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam 
+		nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat 
+		volutpat.
+		Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper 
+		suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem 
+		vel eum iriure dolor in hendrerit in vulputate velit esse molestie 
+		consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et 
+		accumsan et iusto odio dignissim qui blandit praesent luptatum zzril 
+		delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor 
+		cum soluta nobis eleifend option congue nihil imperdiet doming id quod 
+		mazim placerat facer possim assum.
+		Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet
+		 doming id quod mazim placerat facer possim assum.</p>
+	</section>
+	<script type="text/javascript">
+		document.onreadystatechange = function(e){
+			console.log(document.readyState);
+		}
+		window.onload = function(){
+			var xhr = new XMLHttpRequest();
+			xhr.onstatechange = function(){
+				console.log(xhr.readyState,xhr.state);
+			}
+			xhr.open('get','/test');
+			xhr.send();
+		}
+		window.addEventListener('pageshow', function(e) {
+			console.log(e.persisted )
+			//如果检测到页面是从“往返缓存”中读取的，刷新页面
+			// if (e.persisted) {
+			//     window.location.reload();
+			// }
+		});
+		function test() {
+			console.log(1)
+		}
+		test();
+	</script>
+</body>
+</html>

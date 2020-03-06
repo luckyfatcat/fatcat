@@ -1,0 +1,52 @@
+css 响应设计：
+
+1.viewport: 用户网页的可视区域
+
+	设置viewport,针对移动网页优化的页面的viewport meta标签大致如下:
+		width: 控制viewport宽度,如device-width为设备的宽度(单位为缩放100%时的css的像素)
+		height: 和width相对应,指定高度
+		inital-scale: 初始缩放比例,当页面第一次load时候缩放比例
+		maximum-scale: 缩放最大比例
+		minimum-scale: 缩放最小比例
+		user-scalable: 用户是否可以手动缩放
+
+2.网格视图
+	
+	创建响应式网格视图
+
+3.媒体查询(css3): 针对不同媒体类型定义不同的样式
+	
+	@media only screen adn (max-width: 500px) {
+		body {
+			background: lightblue;
+		}
+	}
+
+	移动端优先设计,在设计桌面和其他设备时优先考虑移动端的设计
+
+	方向: 横屏/竖屏
+	orientation: portrait | landscape
+
+	@media only screen and (orientation: landscape) {
+		body {
+			background: red;
+		}
+	}
+
+4.图片
+	html5 picture元素,可以设置多个source,最后一个生效,srcset属性是必需的(图片地址);还必须有img元素承载图片
+
+
+css选择器:
+	css选择器效率从高到低排序如下:
+	1.id选择器
+	2.类选择器
+	3.标签选择器
+	4.相邻选择器(h1+p)
+	5.子选择器
+	6.后代选择器
+	7.通配符选择器
+	8.属性选择器
+	9.伪类选择器
+
+	高效的css就是让浏览器在查找style匹配的元素的时候尽量进行少的查找
