@@ -1,0 +1,89 @@
+html/css
+1.position属性四个值区别和用法
+	static: 默认值,静态
+	absolute: 绝对定位,相对于离他最近的一个有定位的父元素
+	relative: 相对定位,相对于自己的位置
+	fixed: 固定定位,相对于浏览器窗口位置
+
+2.display: none, visibility: hidden, opacity: 0的区别是什么
+	都是可以实现隐藏元素的效果,但是有所区别,display的元素不会占据文档流空间;visibility元素不能点击
+
+3.页面从输入url到页面加载显示完成,过程都发生了什么
+	输入url,进行DNS域名解析,拿到域名对应ip发起请求,服务器接收到请求,从数据库获取到需要的数据返回给浏览器,浏览器接收数据渲染页面
+
+4.前端性能如何优化
+	减少http请求,使用精灵图,压缩js、css、图片等文件,使用缓存
+
+5.h5新增标签
+  header、footer、section、aside、figure、nav、article
+
+6.css3新增属性
+	border-radius box-shadow text-shadow  animation transition background-size 
+
+7.容器居中
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-left: -width/2;
+	margin-top: -height/2;
+
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	margin: auto;
+
+	dispaly: flex;
+	align-items: center;
+	justify-content: center;
+
+	display: table-cell;
+	vertical-align: center;
+
+8.css3 transition和animation
+	过渡和动画,都使元素的变化在一段时间内完成,动画可以控制变化进度,停止启动
+
+9.移动端横竖屏适配方案
+可以添加一个mata标签,设置对应参数
+
+10.h5 localStorage、sessionStorage,cookie的区别
+	存储空间都比cookie大,cookie大概4kb,其他两个可能4MB左右
+	每次请求的时候都会带上cookie
+	localStorage的存储的数据即使浏览器关闭依然存在,sessionStorage存储的数据关闭标签页后数据不存在了
+
+11.一张图片如何在不同分辨率下保持一个等比例缩放还不变形
+	只设置宽度大小,高度自适应
+	使用svg
+
+12.假如你有五个不同的css文件,加载进页面的最好方式是
+	使用link标签引入
+
+13.描述一下html;meta文件里各个属性的作用
+	描述文档信息,关键词,描述,作者等
+	添加移动端适配参数
+
+14. 如何解决移动端字体适配
+	rem em vw vh
+
+15.mvc mvvm的理解
+	m: 模型 数据
+	v: 视图 html
+	c: 控制器 js
+
+	mvvm:
+
+16.解决浏览器兼容性问题
+	添加前缀 -webkit -moz等
+	使用hack, 添加ie浏览器判断,使用不同css
+
+17.防止表单重复提交
+	提交一次表单后禁止提交,等到结果返回后才能再次提交
+
+
+	
