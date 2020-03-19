@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<canvas id="canvas" width="800" height="800"> 
+		
+	</canvas>
+	<script type="text/javascript">
+		var can;
+		var ctx;
+		var w;
+		var h;
+		var persons = [];
+		var curKey;
+		var isRun = false;
+		function Person() {
+			this.name;
+			this.img;
+		}
+		
+		function Yongdaimei(imgSrc) {
+			this.personalImg = imgSrc;
+			this.x;
+			this.y;
+			this.picNumX;
+			this.picNumY;
+		}
+		Yongdaimei.prototype.init = function() {
+			var personalImg = new Image();
+			personalImg.src = this.personalImg;
+			this.personalImg = personalImg;
+			this.x = 300;
+			this.y = 400;
+			this.picNumX = 0;
+			this.picNumY = 5;
+		}
+		Yongdaimei.prototype.draw = function() {
+			ctx.drawImage(this.personalImg,0,this.picNumY*54,54,54, this.x,this.y,108,108);
+		}
+		Yongdaimei.prototype.run = function() {
+			if(!isRun) {
+				return;
+			}
+			if(curKey === 39) {
+				this.picNumY += 1;
+			}else {
+				this.picNumY -= 1;
+			}
+			
+			if(this.picNumY > 8 || this.picNumY < 5) {
+				this.picNumY = 5;
+			}
+			isRun = false;
+		}
+		function init() {
+			can = document.querySelector("#canvas");
+			ctx = can.getContext("2d");
+			w = can.width;
+			h = can.height;
+			document.onkeydown = function(){
+				var event = event || window.event;
+				var keyCode = event.keyCode;
+				if(keyCode === 39 || keyCode === 37) {
+					curKey = keyCode;
+					isRun = true;
+				}
+			}
+			persons.push(new Yongdaimei("./images/yongdaimei.png"));
+			for(let i = 0; i < persons.length; i++) {
+				persons[i].init();
+			}
+			gameloop();
+		}
+		function drawBg() {
+			ctx.fillStyle = "#eee";
+			ctx.fillRect(0,0,w,h);
+		}
+		function gameloop() {
+			requestAnimationFrame(gameloop);
+			drawBg();
+			drawPersons();
+		};
+		function drawPersons() {
+			for(let i = 0; i < persons.length; i++) {
+
+				persons[i].draw();
+				persons[i].run();
+			}
+		}
+		init()
+	</script>
+</body>
+</html>

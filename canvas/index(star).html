@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<canvas id="canvas" width="800" height="800">
+		
+	</canvas>
+	<script type="text/javascript">
+		var canvas;
+		var ctx;
+		var w;
+		var h;
+		var img = new Image();
+		var starImg = new Image();
+		var num = 60;
+		var stars = [];
+		var lastTime;
+		var deltaTime;
+		var isInImg = false;
+		var globalAlpha = 0;
+		var starObj = function() {
+			this.x;
+			this.y;
+			this.starNum;
+			this.timer;
+			this.xSpd;
+			this.ySpd;
+		}
+		starObj.prototype.init = function(){ 
+			//指定随机数
+			//Math.floor(Math.random()*(max - min + 1) + min)
+			this.x = Math.floor(Math.random() * (640 + 1) + 80);
+			this.y = Math.floor(Math.random() * (400 + 1) + 200);
+			this.starNum = Math.floor(Math.random()*7);
+			this.timer = 0;
+			this.xSpd = Math.random()*3 - 1.5;
+			this.ySpd = Math.random()*3 - 1.5;
+		}
+		starObj.prototype.update = function() {
+			this.timer += deltaTime;
+			this.x += this.xSpd * deltaTime * 0.009;
+			this.y += this.ySpd * deltaTime * 0.009;
+			if(this.x < 80 || this.x > 720 || this.y < 200 || this.y > 600) {
+				this.init();
+				return;
+			}
+			if(this.timer > 50) {
+				this.starNum = this.starNum >=7?0:this.starNum+1;
+				this.timer = 0;
+			}
+			
+		}
+		starObj.prototype.draw = function(){
+			//globalAlpha 全局透明度
+			//save() 与restore()成对出现,规定作用区间
+			ctx.save();
+			ctx.globalAlpha = globalAlpha;
+			//drawImage(img , sx, sy, swidth, sheight, x, y, width, height)
+			ctx.drawImage(starImg, 1*this.starNum*7, 0, 7, 7, this.x, this.y, 7, 7);
+			//restore()
+			ctx.restore();
+		}
+		function init() {
+			canvas = document.querySelector("#canvas");
+			ctx = canvas.getContext("2d");
+			w = canvas.width;
+			h = canvas.height;
+			img.src = "./images/kakaxi.jpg";
+			starImg.src = "./images/star.png";
+			lastTime = Date.now();
+			canvas.addEventListener("mousemove", function(){
+				var event = event || window.event;
+				var x = event.offsetX;
+				var y = event.offsetY;
+				if(x >= 80 && x <= 720 && y >= 200 && y <= 600) {
+					isInImg = true;
+				}else {
+					isInImg = false;
+				}
+				
+			})
+			for(var i = 0; i < num; i++) {
+				stars.push(new starObj);
+				stars[i].init();
+			}
+			gameloop();
+		}
+		function drawBackground() {
+			ctx.fillStyle = "#393550";//填充颜色
+			ctx.fillRect(0, 0, w, h);
+		}
+		function gameloop() {
+			var now = Date.now();
+			deltaTime = now - lastTime;
+			lastTime = now;
+			requestAnimationFrame(gameloop);
+			drawBackground();
+			drawImg();
+			drawStars();
+			aliveUpdate();
+		}
+		function drawImg() {
+			//drawImage(img, x, y, width, height)
+			//x轴正方向向右,y轴正方向向下,(0,0)在canvas左上角
+			ctx.drawImage(img, 80, 200, 640, 400);
+		}
+		function drawStars() {
+			for(var i = 0; i < num; i++) {
+				stars[i].update();
+				stars[i].draw();
+			}
+		}
+		function aliveUpdate() {
+			if(isInImg) {//show
+				globalAlpha += deltaTime * 0.008;
+				if(globalAlpha > 1) {
+					globalAlpha = 1;
+				}
+
+			}else {//hide
+				globalAlpha -= deltaTime * 0.008;
+				if(globalAlpha < 0) {
+					globalAlpha = 0;
+				}
+			}
+		}
+		init();
+		
+	</script>
+</body>
+</html>
