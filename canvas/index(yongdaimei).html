@@ -34,19 +34,19 @@
 			this.x = 300;
 			this.y = 400;
 			this.picNumX = 0;
-			this.picNumY = 5;
+			this.picNumY = 3;
 		}
 		Yongdaimei.prototype.draw = function() {
-			ctx.drawImage(this.personalImg,0,this.picNumY*54,54,54, this.x,this.y,108,108);
+			ctx.drawImage(this.personalImg,this.picNumX*80 + 100,this.picNumY*90 - 18 ,80,90, this.x,this.y,80,90);
 		}
 		Yongdaimei.prototype.run = function() {
 			if(!isRun) {
 				return;
 			}
 			if(curKey === 39) {
-				this.picNumY += 1;
+				this.picNumX += 1;
 			}else {
-				this.picNumY -= 1;
+				this.picNumX -= 1;
 			}
 			
 			if(this.picNumY > 8 || this.picNumY < 5) {
@@ -67,7 +67,7 @@
 					isRun = true;
 				}
 			}
-			persons.push(new Yongdaimei("./images/yongdaimei.png"));
+			persons.push(new Yongdaimei("./images/timg.jpg"));
 			for(let i = 0; i < persons.length; i++) {
 				persons[i].init();
 			}
