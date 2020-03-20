@@ -15,62 +15,164 @@
 		var persons = [];
 		var curKey;
 		var isRun = false;
-		function Person() {
-			this.name;
-			this.img;
+		var lastTime;
+		var deltaTime;
+		var action = "stand";//动作
+		var direction = "";
+		function currentDirection(){
+			var direction;
+			switch(curKey) {
+				case 37:
+					direction = "left";
+					break;
+				case 39:
+					direction = "right";
+					break;
+				default:
+					direction = "";
+			}
+			return direction;
 		}
-		
-		function Yongdaimei(imgSrc) {
-			this.personalImg = imgSrc;
+		function Person() {
+			this.pX;//定位x
+			this.pY;//定位y
+			this.width;//宽度
+			this.height;//高度
 			this.x;
 			this.y;
-			this.picNumX;
-			this.picNumY;
+			this.xSpd;
+			this.ySpd;
+			this.downSpd;
+			this.timer;
+			this.positionInfo;
+			this.num;
+			this.img;
 		}
-		Yongdaimei.prototype.init = function() {
-			var personalImg = new Image();
-			personalImg.src = this.personalImg;
-			this.personalImg = personalImg;
-			this.x = 300;
-			this.y = 400;
-			this.picNumX = 0;
-			this.picNumY = 3;
+		Person.prototype.init = function(imgSrc) {
+			var img = new Image();
+			img.src = imgSrc;
+			this.img = img;
+			this.pX = 0;//定位x
+			this.pY = 0;//定位y
+			this.width = 79;
+			this.height = 128;
+			this.x = 80;//画布中x
+			this.y = 400;//画布中y
+			this.xSpd = 0.02;//x轴移动速度
+			this.ySpd = 0.02;//y轴移动速度
+			this.downSpd = 0.02;//下降速度
+			this.timer = 0;//时间
+			this.num = 0;//当前图索引号
 		}
-		Yongdaimei.prototype.draw = function() {
-			ctx.drawImage(this.personalImg,this.picNumX*80 + 100,this.picNumY*90 - 18 ,80,90, this.x,this.y,80,90);
-		}
-		Yongdaimei.prototype.run = function() {
-			if(!isRun) {
-				return;
+		Person.prototype.draw = function() {
+			if(!this.img) {
+				return
 			}
-			if(curKey === 39) {
-				this.picNumX += 1;
-			}else {
-				this.picNumX -= 1;
+			ctx.drawImage(this.img,this.pX, this.pY, this.width, this.height, this.x,this.y,this.width, this.height);
+		}
+		Person.prototype.action = function() {
+			if(isRun) {
+				this.walk();
 			}
 			
-			if(this.picNumY > 8 || this.picNumY < 5) {
-				this.picNumY = 5;
-			}
-			isRun = false;
 		}
+		Person.prototype.run = function() {
+
+		}
+		Person.prototype.walk = function() {
+			this.timer += deltaTime;
+			if(this.timer < 50) {
+				return;
+			}
+			var info = JSON.parse(JSON.stringify(this.positionInfo["walk"]));
+			switch(direction) {
+				case "left":
+					this.num -= 1;
+					this.x -= 10;
+					break;
+				case "right":
+					this.num += 1;
+					this.x += 10;
+					break;
+			}
+			if(this.num > 8 || this.num < 1) {
+				this.num = 2;
+			}
+			this.width = info[this.num].w;
+			this.height = info[this.num].h;
+			if(this.x > w - this.width) {
+				this.x = w - this.width;
+			}
+			if(this.x < this.width) {
+				this.x = this.width;
+			}
+			if(this.num > 0) {
+				this.pX = info.slice(0, this.num + 1).reduce((last, next,index)=>{
+					if(index === info.slice(0, this.num + 1).length - 1) {
+						return last.w;
+					}else {
+						last.w+= next.w;
+						return last;
+					}
+					
+				})
+			}else {
+				this.pX = 0;
+			}
+		
+
+			this.pY = 0;
+			this.timer = 0;
+			isRun = false;
+
+		}
+		Person.prototype.stand = function() {
+
+		}
+		Person.prototype.jump = function() {
+
+		}
+		Person.prototype.attack = function() {
+
+		}
+		Person.prototype.skills =  function() {
+
+		}
+		function Yongdaimei(img) {
+			Person.call(this,);
+			console.log();
+			this.positionInfo = {
+			"walk":[{"imgNum":"179","num":0,"x":0,"y":0,"w":79,"h":128},{"imgNum":"180","num":1,"x":79,"y":0,"w":79,"h":128},{"imgNum":"181","num":2,"x":158,"y":0,"w":79,"h":129},{"imgNum":"182","num":3,"x":237,"y":0,"w":79,"h":129},{"imgNum":"183","num":4,"x":316,"y":0,"w":82,"h":129},{"imgNum":"184","num":5,"x":398,"y":0,"w":88,"h":128},{"imgNum":"185","num":6,"x":486,"y":0,"w":88,"h":129},{"imgNum":"186","num":7,"x":574,"y":0,"w":85,"h":129},{"imgNum":"187","num":8,"x":659,"y":0,"w":81,"h":129}]
+			}
+			this.init(img);
+		}
+		Yongdaimei.prototype = new Person();
+		var yongdaimei = new Yongdaimei("./images/saber_walk.png");
+		yongdaimei.constructor = Yongdaimei;
+
 		function init() {
 			can = document.querySelector("#canvas");
 			ctx = can.getContext("2d");
 			w = can.width;
 			h = can.height;
+			lastTime = Date.now();
 			document.onkeydown = function(){
 				var event = event || window.event;
 				var keyCode = event.keyCode;
 				if(keyCode === 39 || keyCode === 37) {
 					curKey = keyCode;
+					direction = currentDirection(curKey);
 					isRun = true;
 				}
 			}
-			persons.push(new Yongdaimei("./images/timg.jpg"));
-			for(let i = 0; i < persons.length; i++) {
-				persons[i].init();
+			document.onkeyup = function() {
+				var keyCode = event.keyCode;
+				isRun = false;
 			}
+			persons.push(yongdaimei);
+			// for(let i = 0; i < persons.length; i++) {
+			// 	persons[i].init();
+			// }
 			gameloop();
 		}
 		function drawBg() {
@@ -78,6 +180,9 @@
 			ctx.fillRect(0,0,w,h);
 		}
 		function gameloop() {
+			var now = Date.now();
+			deltaTime = now - lastTime;
+			lastTime = now;
 			requestAnimationFrame(gameloop);
 			drawBg();
 			drawPersons();
@@ -86,7 +191,7 @@
 			for(let i = 0; i < persons.length; i++) {
 
 				persons[i].draw();
-				persons[i].run();
+				persons[i].action();
 			}
 		}
 		init()

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<input multiple type="file" name="" onchange="selectFile()" value="选择图片">
+	<input onclick="generatorSprite()" type="button" name="" value="合成">
+	<div class="select-img">
+		
+	</div>
+
+	<div class="sprite">
+		
+	</div>
+	<canvas id="canvas" width="800" height="800"></canvas>
+	<script type="text/javascript">
+		var showSelectImg = document.querySelector(".select-img");
+		var sprite = document.querySelector(".sprite");
+		var imgs = [];
+		var can;
+		var ctx;
+		var w = 0;
+		var h = 0;
+		init();
+		function init() {
+			can = document.querySelector("#canvas");
+			ctx = can.getContext("2d");
+		}
+		function drawImg(img,x,y,w,h) {
+			ctx.drawImage(img,x,y,w,h);
+		}
+		function selectFile() {
+			var files = event.target.files;
+			[].forEach.call(files,file=>{
+				let reader = new FileReader();
+				let num = parseInt(file.name);
+				reader.readAsDataURL(file);
+				reader.onload = function(event) {
+					let img = new Image();
+					img.src = event.target.result;
+					img.setAttribute("num", num);
+					img.onload = function() {
+						showSelectImg.appendChild(img);
+						imgs[num] = img;
+					}
+				}
+			})
+		}
+		function generatorSprite() {
+			if(imgs.length === 0) {
+				console.log("请选择图片");
+				return
+			}
+			var images = new Image();
+			var lastWidth = 0;
+			var position = [];
+			imgs = imgs.filter(item=>item);
+			imgs.forEach(item=>{
+				w+=item.width;
+				h = Math.max(item.height,h);
+			})
+			can.width = w;
+			can.height = h;	
+			imgs.forEach((item, index)=>{
+				if(index > 0) {
+					lastWidth += imgs[index - 1].width;
+				}
+				position.push({
+					imgNum: item.getAttribute("num"),
+					num: index,
+					x: lastWidth,
+					y:0,
+					w:item.width,
+					h:item.height
+				})
+				drawImg(item,lastWidth,0,item.width,item.height);
+			})
+			
+			images.src = can.toDataURL("image/png");
+			images.onload = function(){
+				sprite.appendChild(images);
+				console.log("精灵图:",images);
+				console.log("位置信息:",position)
+			}
+		}
+
+	</script>
+</body>
+</html>
