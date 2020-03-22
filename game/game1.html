@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		canvas {
+			display: block;
+			border: 1px solid black;
+			margin: 0 auto;
+		}
+	</style>
+	<script src="ball.js"></script>
+	<script src="game.js"></script>
+	<script src="./plank.js"></script>
+	<script src="utils.js"></script>
+	<script src="block.js"></script>
+</head>
+<body>
+	<canvas id="canvas" width="500" height="400"></canvas>
+	<script type="text/javascript">
+		var __main = function() {
+			var plank = Plank();
+			var game = Game();
+			var ball = Ball();
+			var blocks = [];
+			for(var i = 0 ; i < 3; i++) {
+				var b = Block();
+				b.x = i*150 + 20;
+
+				blocks.push(b);
+				
+			}
+			game.registerActions("ArrowLeft", function() {
+				plank.moveLeft();
+			})
+			game.registerActions("ArrowRight", function() {
+				plank.moveRight();
+			})
+			game.registerActions("f", function() {
+				ball.fire();
+
+			})
+			ball.move = function() {
+				if(ball.fired) {
+					ball.collide(game);
+					ball.x += ball.speedX;
+					ball.y += ball.speedY;
+				}
+			}
+			game.draw = function() {
+				game.drawImage(plank);
+				game.drawImage(ball);
+				for(var i = 0 ; i < blocks.length; i++) {
+					var block = blocks[i];
+					if(block.alive) {
+						game.drawImage(block);
+					}
+				}
+				
+			}
+			game.update = function() {
+				if(plank.collide(ball)) {
+					ball.rebound();
+				}
+				for(var i = 0 ; i < blocks.length; i++) {
+					var block = blocks[i];
+					if(block.collide(ball)) {
+						block.kill();
+						ball.rebound();
+					}
+				}
+				ball.move();
+				for(let i in game.keys) {
+					if(game.keys[i]) {
+						game.keyActions[i]();
+						return;
+					}
+				}
+			}
+			
+		};
+		__main();
+	</script>
+</body>
+</html>

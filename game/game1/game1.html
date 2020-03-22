@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		canvas {
+			display: block;
+			border: 1px solid black;
+			margin: 0 auto;
+		}
+	</style>
+	<script src="levels.js"></script>
+	<script src="ball.js"></script>
+	<script src="game.js"></script>
+	<script src="plank.js"></script>
+	<script src="utils.js"></script>
+	<script src="block.js"></script>
+	
+</head>
+<body>
+	<canvas id="canvas" width="500" height="400"></canvas>
+	<script type="text/javascript">
+		var blocks = [];
+		var paused = false;
+		var pointIn = function(obj, x,  y) {
+			if(x>obj.x && x < obj.x + obj.image.width) {
+				if(y > obj.y && y < obj.y + obj.image.height) {
+					return true;
+				}
+			}
+			return false;
+		};
+		var assistFunc = function(enable) {
+			if(!enable) {
+				return
+			}
+			window.addEventListener("keydown", function(event){
+				var k = event.key;
+				if("123".includes(k)) {
+					blocks = loadBlock(Number(k));
+				}
+			})
+			window.addEventListener("keydown", function(event){
+				var k = event.key;
+				if(k === "p") {
+					paused = !paused;
+				}
+			})
+		};
+		var loadBlock = function(n) {
+			var blocks = [];
+			n = n - 1;
+			for(var i = 0 ; i < levels[n].length; i++) {
+				var b = Block(levels[n][i]);
+				blocks.push(b);
+			}
+			return blocks;
+		};
+		var __main = function() {
+			var plank = Plank();
+			var game = Game();
+			var ball = Ball();
+			var score = 0;
+			var enableDrag = false;
+			blocks = loadBlock(1);
+			game.registerActions("ArrowLeft", function() {
+				plank.moveLeft();
+			})
+			game.registerActions("ArrowRight", function() {
+				plank.moveRight();
+			})
+			game.registerActions("f", function() {
+				ball.fire();
+			})
+			assistFunc(true);
+			ball.move = function() {
+				if(ball.fired) {
+					ball.collide(game);
+					ball.x += ball.speedX;
+					ball.y += ball.speedY;
+				}
+			}
+
+			game.canvas.addEventListener("mousedown", function(event){
+				var x = event.offsetX;
+				var y = event.offsetY;
+				if(pointIn(ball, x, y)) {
+					enableDrag = true;
+				}	
+				
+			})
+			game.canvas.addEventListener("mousemove", function(event){
+				if(enableDrag) {
+					var x = event.offsetX;
+					var y = event.offsetY;
+					ball.x = x;
+					ball.y = y;
+				}		
+			})
+			game.canvas.addEventListener("mouseup", function(event){
+				enableDrag = false;
+			})
+			game.draw = function() {
+				game.drawBg();
+				game.drawImage(plank);
+				game.drawImage(ball);
+				for(var i = 0 ; i < blocks.length; i++) {
+					var block = blocks[i];
+					if(block.alive) {
+						game.drawImage(block);
+					}
+				}
+				game.drawText("分数: " + score);
+				
+			}
+			game.update = function() {
+				if(paused) {
+					return;
+				}
+				if(plank.collide(ball)) {
+					ball.rebound();
+				}
+				for(var i = 0 ; i < blocks.length; i++) {
+					var block = blocks[i];
+					if(block.collide(ball)) {
+						block.kill();
+						ball.rebound();
+						score += 100;
+					}
+				}
+				ball.move();
+				for(let i in game.keys) {
+					if(game.keys[i] && game.keyActions[i]) {
+						game.keyActions[i]();
+						return;
+					}
+				}
+				
+			}
+			
+		};
+		__main();
+	</script>
+</body>
+</html>

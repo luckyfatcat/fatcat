@@ -14,11 +14,47 @@
 		var h;
 		var persons = [];
 		var curKey;
-		var isRun = false;
-		var lastTime;
-		var deltaTime;
+		var lastTime;//上一次渲染时间
+		var deltaTime;//时间差值
 		var action = "stand";//动作
 		var direction = "";
+		var lastActionTime = Date.now();//上一次动作时间
+		var actionDeltaTime;//动作执行时间差值
+		var isAttack = false;//是否攻击
+		var curDirection = "right";//当前人物朝向
+		var imgs = {
+			walk: "./images/saber_walk.png",
+			run:"./images/saber_run.png",
+			attack: "./images/saber_attack.png"
+		};
+		var count = 0;
+		for(let i in imgs) {
+			let img = new Image();
+			img.src = imgs[i];
+			img.onload = function(){
+				imgs[i] = img;
+				count++;
+				if(count === Object.keys(imgs).length) {
+					init();
+				}
+			}
+		}
+		function currentAction(curKey){
+			var action;
+			switch(curKey) {
+				case 37:
+				case 39:
+					action = actionDeltaTime<100?"run":"walk";
+					break;
+				case 88:
+					isAttack = true;
+					action = "attack";
+					break;
+				default:
+					action = "stand";
+			}
+			return action;
+		}
 		function currentDirection(){
 			var direction;
 			switch(curKey) {
@@ -49,9 +85,9 @@
 			this.img;
 		}
 		Person.prototype.init = function(imgSrc) {
-			var img = new Image();
-			img.src = imgSrc;
-			this.img = img;
+			// var img = new Image();
+			// img.src = imgSrc;
+			// this.img = img;
 			this.pX = 0;//定位x
 			this.pY = 0;//定位y
 			this.width = 79;
@@ -68,16 +104,85 @@
 			if(!this.img) {
 				return
 			}
-			ctx.drawImage(this.img,this.pX, this.pY, this.width, this.height, this.x,this.y,this.width, this.height);
+			ctx.save();
+			if(direction === "left") {
+				ctx.scale(-1,1);
+				ctx.drawImage(this.img,-this.pX, this.pY, -this.width, this.height, this.x,this.y,this.width, this.height);
+			}else {
+				ctx.scale(1,1);
+				ctx.drawImage(this.img,this.pX, this.pY, this.width, this.height, this.x,this.y,this.width, this.height);
+			}
+			
+			ctx.restore();
 		}
 		Person.prototype.action = function() {
-			if(isRun) {
-				this.walk();
+			console.log(action)
+			
+			switch(action) {
+				case "run":
+					this.img = imgs.run;
+					this.run();
+					break;
+				case "walk":
+					this.img = imgs.walk;
+					this.walk();
+					break;
+				case "stand":
+					this.img = imgs.walk;
+					this.stand();
+					break;
+				case "attack":
+					this.img = imgs.attack;
+					this.attack();
+					break;
 			}
+			
 			
 		}
 		Person.prototype.run = function() {
-
+			this.timer += deltaTime;
+			if(this.timer < 50) {
+				return;
+			}
+			var info = JSON.parse(JSON.stringify(this.positionInfo["run"]));
+			switch(direction) {
+				case "left":
+					this.num -= 1;
+					this.x -= 20;
+					break;
+				case "right":
+					this.num += 1;
+					this.x += 20;
+					break;
+			}
+			if(this.num > 7 || this.num < 0) {
+				this.num = 0;
+			}
+			this.width = info[this.num].w;
+			this.height = info[this.num].h;
+			if(this.x > w - this.width) {
+				this.x = w - this.width;
+			}
+			if(this.x < this.width) {
+				this.x = this.width;
+			}
+			if(this.num > 0) {
+				this.pX = info.slice(0, this.num + 1).reduce((last, next,index)=>{
+					if(index === info.slice(0, this.num + 1).length - 1) {
+						return last.w;
+					}else {
+						last.w+= next.w;
+						return last;
+					}
+					
+				})
+			}else {
+				this.pX = 0;
+			}
+		
+			// console.log(action)
+			this.pY = 0;
+			this.timer = 0;
 		}
 		Person.prototype.walk = function() {
 			this.timer += deltaTime;
@@ -109,7 +214,12 @@
 			if(this.num > 0) {
 				this.pX = info.slice(0, this.num + 1).reduce((last, next,index)=>{
 					if(index === info.slice(0, this.num + 1).length - 1) {
-						return last.w;
+						if(info.slice(0, this.num + 1).length === info.length) {
+							return last.w + next.w;
+						}else {
+							return last.w;
+						}
+						
 					}else {
 						last.w+= next.w;
 						return last;
@@ -123,32 +233,85 @@
 
 			this.pY = 0;
 			this.timer = 0;
-			isRun = false;
 
 		}
 		Person.prototype.stand = function() {
-
+			var info = JSON.parse(JSON.stringify(this.positionInfo["walk"]));
+			this.num = 0;
+			this.pX = 0;
+			this.width = info[this.num].w;
+			this.height = info[this.num].h;
 		}
 		Person.prototype.jump = function() {
 
 		}
 		Person.prototype.attack = function() {
-
+			this.timer += deltaTime;
+			if(this.timer > 300 && !isAttack) {
+				action = "stand";
+				return;
+			}
+			if(!isAttack) {
+				return;
+			}
+					
+			if(this.timer < 50) {
+				return;
+			}
+			var info = JSON.parse(JSON.stringify(this.positionInfo["attack"]));
+			this.num += 1;
+			switch(direction) {
+				case "left":	
+					// this.x -= 5;
+					break;
+				case "right":
+					// this.x += 5;
+					break;
+			}
+			if(this.num > 11 || this.num < 0) {
+				this.num = 0;
+			}
+			this.width = info[this.num].w;
+			this.height = info[this.num].h;
+			if(this.x > w - this.width) {
+				this.x = w - this.width;
+			}
+			if(this.x < this.width) {
+				this.x = this.width;
+			}
+			if(this.num > 0) {
+				this.pX = info.slice(0, this.num + 1).reduce((last, next,index)=>{
+					if(index === info.slice(0, this.num + 1).length - 1) {
+						return last.w;
+					}else {
+						last.w+= next.w;
+						return last;
+					}
+					
+				})
+			}else {
+				this.pX = 0;
+			}
+		
+			isAttack = false;
+			this.pY = 0;
+			this.timer = 0;
 		}
 		Person.prototype.skills =  function() {
 
 		}
 		function Yongdaimei(img) {
 			Person.call(this,);
-			console.log();
+			this.img = imgs.walk;
+			console.log(imgs.walk)
 			this.positionInfo = {
-			"walk":[{"imgNum":"179","num":0,"x":0,"y":0,"w":79,"h":128},{"imgNum":"180","num":1,"x":79,"y":0,"w":79,"h":128},{"imgNum":"181","num":2,"x":158,"y":0,"w":79,"h":129},{"imgNum":"182","num":3,"x":237,"y":0,"w":79,"h":129},{"imgNum":"183","num":4,"x":316,"y":0,"w":82,"h":129},{"imgNum":"184","num":5,"x":398,"y":0,"w":88,"h":128},{"imgNum":"185","num":6,"x":486,"y":0,"w":88,"h":129},{"imgNum":"186","num":7,"x":574,"y":0,"w":85,"h":129},{"imgNum":"187","num":8,"x":659,"y":0,"w":81,"h":129}]
+			"walk":[{"imgNum":"179","num":0,"x":0,"y":0,"w":79,"h":128},{"imgNum":"180","num":1,"x":79,"y":0,"w":79,"h":128},{"imgNum":"181","num":2,"x":158,"y":0,"w":79,"h":129},{"imgNum":"182","num":3,"x":237,"y":0,"w":79,"h":129},{"imgNum":"183","num":4,"x":316,"y":0,"w":82,"h":129},{"imgNum":"184","num":5,"x":398,"y":0,"w":88,"h":128},{"imgNum":"185","num":6,"x":486,"y":0,"w":88,"h":129},{"imgNum":"186","num":7,"x":574,"y":0,"w":85,"h":129},{"imgNum":"187","num":8,"x":659,"y":0,"w":81,"h":129}],
+			"run":[{"imgNum":"105","num":0,"x":0,"y":0,"w":130,"h":103},{"imgNum":"106","num":1,"x":130,"y":0,"w":124,"h":97},{"imgNum":"107","num":2,"x":254,"y":0,"w":133,"h":98},{"imgNum":"108","num":3,"x":387,"y":0,"w":126,"h":101},{"imgNum":"109","num":4,"x":513,"y":0,"w":136,"h":101},{"imgNum":"110","num":5,"x":649,"y":0,"w":130,"h":95},{"imgNum":"111","num":6,"x":779,"y":0,"w":134,"h":98},{"imgNum":"112","num":7,"x":913,"y":0,"w":139,"h":103}],
+			"attack":[{"imgNum":"11","num":0,"x":0,"y":0,"w":100,"h":96},{"imgNum":"12","num":1,"x":100,"y":0,"w":174,"h":96},{"imgNum":"13","num":2,"x":274,"y":0,"w":129,"h":93},{"imgNum":"14","num":3,"x":403,"y":0,"w":153,"h":93},{"imgNum":"15","num":4,"x":556,"y":0,"w":154,"h":94},{"imgNum":"16","num":5,"x":710,"y":0,"w":153,"h":94},{"imgNum":"188","num":6,"x":863,"y":0,"w":110,"h":109},{"imgNum":"189","num":7,"x":973,"y":0,"w":115,"h":106},{"imgNum":"190","num":8,"x":1088,"y":0,"w":170,"h":108},{"imgNum":"191","num":9,"x":1258,"y":0,"w":114,"h":81},{"imgNum":"192","num":10,"x":1372,"y":0,"w":161,"h":80},{"imgNum":"193","num":11,"x":1533,"y":0,"w":154,"h":80}]
 			}
 			this.init(img);
 		}
-		Yongdaimei.prototype = new Person();
-		var yongdaimei = new Yongdaimei("./images/saber_walk.png");
-		yongdaimei.constructor = Yongdaimei;
+		
 
 		function init() {
 			can = document.querySelector("#canvas");
@@ -156,18 +319,34 @@
 			w = can.width;
 			h = can.height;
 			lastTime = Date.now();
+			Yongdaimei.prototype = new Person();
+			yongdaimei = new Yongdaimei();
+			yongdaimei.constructor = Yongdaimei;
 			document.onkeydown = function(){
 				var event = event || window.event;
 				var keyCode = event.keyCode;
-				if(keyCode === 39 || keyCode === 37) {
+				console.log(keyCode)
+				if(keyCode === 39 || keyCode === 37 || keyCode === 88) {
+					var now = Date.now();
+					if(action!=="run") {
+						actionDeltaTime = now - lastActionTime;
+					}
 					curKey = keyCode;
 					direction = currentDirection(curKey);
-					isRun = true;
+					action = currentAction(curKey);
+					
 				}
 			}
 			document.onkeyup = function() {
 				var keyCode = event.keyCode;
-				isRun = false;
+				if(keyCode === 39 || keyCode === 37 || keyCode === 88) {
+					lastActionTime = Date.now();
+					if(action!=="attack") {
+						action = "stand";
+						actionDeltaTime = 1000;
+					}
+					
+				}
 			}
 			persons.push(yongdaimei);
 			// for(let i = 0; i < persons.length; i++) {
@@ -189,12 +368,12 @@
 		};
 		function drawPersons() {
 			for(let i = 0; i < persons.length; i++) {
-
+		
 				persons[i].draw();
 				persons[i].action();
 			}
 		}
-		init()
+		
 	</script>
 </body>
 </html>
