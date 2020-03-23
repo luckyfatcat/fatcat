@@ -1,0 +1,29 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	line-height: 1;
+}
+nav,
+section,
+main,
+{
+	display: block;
+}
+a {
+	text-decoration: none;
+}
+a:link {
+	color: #333;
+}
+a:visited {
+	color: red;
+}
+a:hover {
+	cursor: pointer;
+	color: #0b9a8e;
+	text-decoration: underline;
+}
+a:active {
+	color: #0b9a8e;
+}

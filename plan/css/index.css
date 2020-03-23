@@ -1,0 +1,32 @@
+.page {
+	height: 100%;
+}
+.main {
+	position: relative;
+	height: 100%;
+	overflow: hidden;
+	background-color: #efe8e86b;
+	padding: 40px 20px;
+}
+.left_side {
+	float: left;
+	height: 100%;
+	width: 200px;
+	text-align: center;
+	background-color: #eee;
+	padding: 20px 0;
+}
+.left_side .left_side_menu li{
+	display: block;
+	height: 40px;
+	line-height: 40px;
+}
+.left_side .left_side_menu .active_menu{
+	text-decoration: underline;
+	color: #0b9a8e;
+}
+.main .page_time {
+	position: absolute;
+	left: 20px;
+	bottom: 20px;
+}
