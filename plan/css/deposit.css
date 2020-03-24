@@ -1,15 +1,14 @@
 .page_plan {
 	height: 100%;
 }
+/*进度*/
 .page_plan .plan_progress {
 	height: 40px;
 	line-height: 40px;
 }
-.page_plan .plan_progress * {
-	vertical-align: middle;
-}
+/*目标内容*/
 .page_plan .plan_today {
-	height: calc( 100% - 40px);
+	height: calc( 100% - 40px - 40px);
 }
 .page_plan .plan_today h2{
 	height: 30px;
@@ -20,6 +19,7 @@
 	overflow: auto;
 	padding: 20px;
 }
+/*目标项*/
 .page_plan .plan_today .plan_today_content  .plan_today_item{
 	display: inline-block;
 	height: 30px;
@@ -35,4 +35,9 @@
 .page_plan .plan_today .plan_today_content  .plan_today_item label input {
 	margin-left: 5px;
 	vertical-align: middle;
+}
+/*提交按钮*/
+.page_plan .plan_today .plan_form_submmit {
+	height: 40px;
+	text-align: center;
 }

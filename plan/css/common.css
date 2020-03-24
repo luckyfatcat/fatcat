@@ -1,4 +1,21 @@
 html,body {
 	height: 100%;
 }
+/*按钮样式*/
+.btn {
+	width: 140px;
+	height: 40px;
+	line-height: 40px;
+	border-radius: 5px;
+	outline: none;
+	cursor: pointer;
+	color: #fff;
+	border: none;
+}
+.btn_default {
+	background-color: #12a8e4;
+}
+.btn_default:hover {
+	background-color: #12a8e4d9;
+}
 

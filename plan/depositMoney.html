@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf-8">
 	<title>存钱</title>
 	<link rel="stylesheet" type="text/css" href="./css/common.css">
 	<link rel="stylesheet" type="text/css" href="./css/reset.css">
@@ -9,21 +10,32 @@
 <body>
 	<section class="page_deposit page_plan">
 		<section class="plan_progress">
-			<span>当前进度: 10%</span>
-			<progress value="10" max="100">
+			当前进度: <span class="plan_progress_val"> 0%</span>
+			<progress value="0" max="100">
 		</section>
 		<section class="plan_today">
 			<h2>今日目标</h2>
-			<section class="plan_today_content">
+			<form  method="get" action="/deposit/update" id="plan_form" class="plan_today_content" target="iframeContent">
 				<div class="plan_today_item">
-					<label>记录今日消费<input class="plan_check" type="checkbox" name="" data-id="consume"></label>
+					<label>记录今日消费<input class="plan_check" type="checkbox" name="consume" data-id="consume"></label>
 				</div>
-			</section>
+				<div class="plan_today_item">
+					<label>上午消费10块之内<input class="plan_check" type="checkbox" name="morning" data-id="morning"></label>
+				</div>
+				<div class="plan_today_item">
+					<label>中午消费15块之内<input class="plan_check" type="checkbox" name="noon" data-id="noon"></label>
+				</div>
+			</form>
+			<div class="plan_form_submmit">
+				<input class="btn btn_default" type="submit" name="" form="plan_form">
+			</div>
 		</section>
 	</section>
+	<iframe id="id_iframe" src="" style="display: none"; name="iframeContent">
+
+	</iframe>
 	<script type="text/javascript" src="./js/utils.js"></script>
 	<script type="text/javascript" src="./js/plan.js"></script>
 	<script type="text/javascript" src="./js/deposit.js"></script>
-
 </body>
 </html>
