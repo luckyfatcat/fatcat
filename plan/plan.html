@@ -2,16 +2,24 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>存钱</title>
+	<title>计划</title>
 	<link rel="stylesheet" type="text/css" href="./css/common.css">
 	<link rel="stylesheet" type="text/css" href="./css/reset.css">
-	<link rel="stylesheet" type="text/css" href="./css/deposit.css">
+	<link rel="stylesheet" type="text/css" href="./css/plan.css">
 </head>
 <body>
-	<section class="page_deposit page_plan">
+	<section class="page_plan">
 		<section class="plan_progress">
 			当前进度: <span class="plan_progress_val"> 0%</span>
 			<progress value="0" max="100">
+		</section>
+		<section class="plan_langTerm">
+			<h2>长期目标 <span>(一年左右)</span> </h2>
+			<p class="longTerm_text"></p>
+		</section>
+		<section class="plan_shortTerm">
+			<h2>短期目标 <span>(一月左右)</span> </h2>
+			<p class="shortTerm_text"></p>
 		</section>
 		<section class="plan_today">
 			<h2>今日目标</h2>
@@ -36,6 +44,5 @@
 	</iframe>
 	<script type="text/javascript" src="./js/utils.js"></script>
 	<script type="text/javascript" src="./js/plan.js"></script>
-	<script type="text/javascript" src="./js/deposit.js"></script>
 </body>
 </html>

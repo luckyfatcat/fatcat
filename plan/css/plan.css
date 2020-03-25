@@ -7,12 +7,27 @@
 	line-height: 40px;
 }
 /*目标内容*/
-.page_plan .plan_today {
-	height: calc( 100% - 40px - 40px);
-}
-.page_plan .plan_today h2{
+.page_plan h2{
 	height: 30px;
 	line-height: 30px;
+}
+.page_plan h2 >span {
+	font-size: 14px;
+	color: #5a5656;
+}
+/*长期目标*/
+.page_plan .plan_langTerm p{
+	height: 20px;
+	line-height: 20px;
+}
+/*短期目标*/
+.page_plan .plan_shortTerm p{
+	height: 20px;
+	line-height: 20px;
+}
+/*今日目标*/
+.page_plan .plan_today {
+	height: calc( 100% - 40px - 40px - 50px - 50px);
 }
 .page_plan .plan_today .plan_today_content {
 	height: calc(100% - 30px);

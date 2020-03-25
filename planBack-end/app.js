@@ -12,6 +12,56 @@ app.get("/",function(req, res) {
 	res.status(200);
 	fs.createReadStream(path.resolve(__dirname, "..") + '/plan/index.html').pipe(res);
 })
+//更新减肥
+app.get("/slimming/update", function(req, res) {
+	res.status(200);
+	res.send({
+		code: 0,
+		message: "减肥更新"
+	})
+})
+//更新学习
+app.get("/study/update", function(req, res) {
+	res.status(200);
+	res.send({
+		code: 0,
+		message: "学习更新"
+	})
+})
+function inspactPlanFile(plan, notExistsCallbak,existsCallbak) {
+	var filename = "plan_" + plan + "_" + utils.getCurrentTime();
+	var path = __dirname + "/plan_log/" + filename + ".json";
+	if(!utils.isExists(path)) {
+		notExistsCallbak(path);
+	}else {
+		existsCallbak(path);
+	}
+}
+function writePlanFile(path, text) {	
+	fs.writeFileSync(path,text);
+}
+//获取存钱目标信息
+app.get("/deposit/get", function(req, res) {
+	var notExistsCallbak = function(path) {
+		var defaultPlan = __dirname + "/data/deposit.json"; 
+		var text = fs.readFileSync(defaultPlan);
+		writePlanFile(path, JSON.stringify(text));
+		console.log(JSON.stringify(text));
+		return JSON.stringify(text);
+	};
+	var existsCallbak = function(path) {
+		var text = fs.readFileSync(path);
+		return JSON.stringify(text);
+	};
+	var text = inspactPlanFile("deposit",notExistsCallbak,existsCallbak);
+	console.log(text);
+	res.status(200);
+	res.send({
+		code: 0,
+		message: text
+	})
+})
+// 更新存钱
 app.get("/deposit/update", function(req, res) {
 	var query = req.query;
 	var filename = "plan_" + utils.getCurrentTime();
@@ -31,27 +81,24 @@ app.get("/deposit/update", function(req, res) {
 				text = "";
 		}
 	}
-	utils.isExists(__dirname + '/plan_log',function(){
-		fs.mkdirSync(__dirname + '/plan_log',function(err) {
-			if(err) {
-				console.log("创建文件夹失败,",err);
-			}
-		})
-	})
+	
+	if(!utils.isExists(__dirname + '/plan_log')) {
+		fs.mkdirSync(__dirname + '/plan_log');
+	}
 	fs.writeFile(__dirname + '/plan_log/' +filename + '.txt', text,function(err){
 		if(err) {
 			console.log(err)
 			res.status(500);
 			res.send({
 				code: 1,
-				message: "更新失败"
+				message: "存钱更新失败"
 			});
 			return
 		}
 		res.status(200);
 		res.send({
 			code: 0,
-			message: "更新成功"
+			message: "存钱更新成功"
 		});
 	})
 })

@@ -1,11 +1,6 @@
 const fs = require('fs');
-function isExists(path,callback) {
-	fs.existsSync(path, function(err) {
-		if(err) {
-			return false;
-		}
-		callback();
-	})
+function isExists(path) {
+	fs.existsSync(path);
 }
 function getCurrentTime() {
 	var date = new Date();
@@ -16,6 +11,7 @@ function getCurrentTime() {
 	day = day >= 10?day: '0' + day;
 	return `${year}-${month}-${day}`;
 }
+
 module.exports = {
 	isExists: isExists,
 	getCurrentTime: getCurrentTime

@@ -1,0 +1,26 @@
+{
+	"longTerm": "存到10万块",
+	"shortTerm": "存6000块",
+	"plan":[
+		{
+			"key": "notes_consume",
+			"text": "记录消费情况",
+			"complete": false
+		},
+		{
+			"key": "mor_consume",
+			"text": "早饭在家吃",
+			"complete": false
+		},
+		{
+			"key": "noon_consume",
+			"text": "午饭消费15块之内",
+			"complete": false
+		},
+		{
+			"key": "snack_consume",
+			"text": "不吃零食",
+			"complete": false
+		}
+	]
+}

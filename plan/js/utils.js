@@ -1,3 +1,16 @@
+const Host = "http://localhost:3000";
+function ajax(method, url,callback, data,async) {
+	var xhr = new XMLHttpRequest();
+	data = data || null;
+	async = async || true;
+	xhr.onreadystatechange = function() {
+		if(xhr.readyState === 4) {
+			callback(JSON.parse(xhr.responseText));
+		}
+	}
+	xhr.open(method, url, async);
+	xhr.send(data);
+}
 function getCurrentTime() {
 	var d = new Date();
 	var year = d.getFullYear();
