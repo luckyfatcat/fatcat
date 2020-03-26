@@ -6,6 +6,56 @@ const app = express();
 const os = require("os");
 const port = 3000;
 const ip = os.networkInterfaces().WLAN[1].address;
+//获取默认json数据
+function getDefaultPlan(plan) {
+	var path = __dirname + `/data/${plan}.json`; 
+	var json = fs.readFileSync(path);
+	return JSON.parse(json);
+}
+//获取plan数据
+function getPlan(plan) {
+	var filename = `plan_${plan}_` + utils.getCurrentTime();
+	var path = __dirname + "/plan_log/" + filename + ".json";
+	var json;
+	if(utils.isExists(path)) {
+		json = JSON.parse(fs.readFileSync(path));
+	}else {
+		json = getDefaultPlan(plan);
+		fs.writeFileSync(path,JSON.stringify(json));
+	}
+	return json;
+}
+//更新数据
+function updatePlan(req, plan) {
+	var query = req.query;
+	var filename = `plan_${plan}_` + utils.getCurrentTime();
+	var path = __dirname + "/plan_log/" + filename + ".json";
+	var json = getPlan(plan);
+	for(let j = 0; j < json.plan.length; j++) {
+		json.plan[j].complete = false;
+	}
+	for(let i in query) {
+		for(let j = 0; j < json.plan.length; j++) {
+			if(i === json.plan[j].key) {
+				json.plan[j].complete = true;
+				break;
+			}
+		}
+	}
+	fs.writeFileSync(path,JSON.stringify(json));
+}
+app.all("*",function(req,res,next){
+    //设置允许跨域的域名，*代表允许任意域名跨域
+    res.header("Access-Control-Allow-Origin","*");
+    //允许的header类型
+    res.header("Access-Control-Allow-Headers","content-type");
+    //跨域允许的请求方式 
+    res.header("Access-Control-Allow-Methods","DELETE,PUT,POST,GET,OPTIONS");
+    if (req.method.toLowerCase() == 'options')
+        res.send(200);  //让options尝试请求快速结束
+    else
+        next();
+});
 app.use(express.static(path.join(path.resolve(__dirname, '..') , 'plan')));
 app.get("/",function(req, res) {
 	console.log(path.resolve(__dirname, "..") + '/plan/index.html')
@@ -14,93 +64,57 @@ app.get("/",function(req, res) {
 })
 //更新减肥
 app.get("/slimming/update", function(req, res) {
+	updatePlan(req, "slimming");
 	res.status(200);
 	res.send({
 		code: 0,
-		message: "减肥更新"
-	})
+		message: "减肥更新成功"
+	});
 })
 //更新学习
 app.get("/study/update", function(req, res) {
+	updatePlan(req, "study");
 	res.status(200);
 	res.send({
 		code: 0,
-		message: "学习更新"
+		message: "学习更新成功"
+	});
+})
+//获取减肥目标信息
+app.get("/slimming/get", function(req, res) {
+	var json = getPlan("slimming");
+	res.status(200);
+	res.send({
+		code: 0,
+		message: json
 	})
 })
-function inspactPlanFile(plan, notExistsCallbak,existsCallbak) {
-	var filename = "plan_" + plan + "_" + utils.getCurrentTime();
-	var path = __dirname + "/plan_log/" + filename + ".json";
-	if(!utils.isExists(path)) {
-		notExistsCallbak(path);
-	}else {
-		existsCallbak(path);
-	}
-}
-function writePlanFile(path, text) {	
-	fs.writeFileSync(path,text);
-}
-//获取存钱目标信息
-app.get("/deposit/get", function(req, res) {
-	var notExistsCallbak = function(path) {
-		var defaultPlan = __dirname + "/data/deposit.json"; 
-		var text = fs.readFileSync(defaultPlan);
-		writePlanFile(path, JSON.stringify(text));
-		console.log(JSON.stringify(text));
-		return JSON.stringify(text);
-	};
-	var existsCallbak = function(path) {
-		var text = fs.readFileSync(path);
-		return JSON.stringify(text);
-	};
-	var text = inspactPlanFile("deposit",notExistsCallbak,existsCallbak);
-	console.log(text);
+//获取学习目标信息
+app.get("/study/get", function(req, res) {
+	var json = getPlan("study");
 	res.status(200);
 	res.send({
 		code: 0,
-		message: text
+		message: json
+	})
+})
+//获取存钱目标信息
+app.get("/deposit/get", function(req, res) {
+	var json = getPlan("deposit");
+	res.status(200);
+	res.send({
+		code: 0,
+		message: json
 	})
 })
 // 更新存钱
 app.get("/deposit/update", function(req, res) {
-	var query = req.query;
-	var filename = "plan_" + utils.getCurrentTime();
-	var text = "";
-	for(var i in query) {
-		switch(i) {
-			case "consume":
-				text+="消费记录:"+query[i]+",";
-				break;
-			case "morning":
-				text+="早上:"+query[i]+",";
-				break;
-			case "noon":
-				text+="中午:"+query[i]+",";
-				break;
-			default:
-				text = "";
-		}
-	}
-	
-	if(!utils.isExists(__dirname + '/plan_log')) {
-		fs.mkdirSync(__dirname + '/plan_log');
-	}
-	fs.writeFile(__dirname + '/plan_log/' +filename + '.txt', text,function(err){
-		if(err) {
-			console.log(err)
-			res.status(500);
-			res.send({
-				code: 1,
-				message: "存钱更新失败"
-			});
-			return
-		}
-		res.status(200);
-		res.send({
-			code: 0,
-			message: "存钱更新成功"
-		});
-	})
+	updatePlan(req, "deposit");
+	res.status(200);
+	res.send({
+		code: 0,
+		message: "存钱更新成功"
+	});
 })
 app.listen(port,()=>{
 	console.log("服务启动:http://"+ip +":"+ port);

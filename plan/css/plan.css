@@ -17,17 +17,19 @@
 }
 /*长期目标*/
 .page_plan .plan_langTerm p{
-	height: 20px;
-	line-height: 20px;
+	font-size: 16px;
+	padding: 10px;
+	color: rgb(240, 44, 44);
 }
 /*短期目标*/
 .page_plan .plan_shortTerm p{
-	height: 20px;
-	line-height: 20px;
+	font-size: 16px;
+	padding: 10px;
+	color: rgb(240, 44, 44);
 }
 /*今日目标*/
 .page_plan .plan_today {
-	height: calc( 100% - 40px - 40px - 50px - 50px);
+	height: calc( 100% - 40px - 40px - 66px - 66px);
 }
 .page_plan .plan_today .plan_today_content {
 	height: calc(100% - 30px);

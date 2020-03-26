@@ -1,0 +1,16 @@
+{
+	"longTerm": "减到130",
+	"shortTerm": "减肥5斤",
+	"plan":[
+		{
+			"key": "noon",
+			"text": "晚饭少吃",
+			"complete": false
+		},
+		{
+			"key": "snack_consume",
+			"text": "不吃零食",
+			"complete": false
+		}
+	]
+}

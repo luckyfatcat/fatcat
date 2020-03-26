@@ -1,6 +1,6 @@
 const fs = require('fs');
 function isExists(path) {
-	fs.existsSync(path);
+	return fs.existsSync(path);
 }
 function getCurrentTime() {
 	var date = new Date();
