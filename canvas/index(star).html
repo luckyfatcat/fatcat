@@ -2,24 +2,48 @@
 <html>
 <head>
 	<title></title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+	<style type="text/css">
+		* {
+			margin: 0;
+			box-sizing: border-box;
+		}
+		html,body {
+			height: 100%;
+		}
+		body {
+			overflow: hidden;
+		}
+	</style>
 </head>
 <body>
-	<canvas id="canvas" width="800" height="800">
+	<audio controls="" src="./audio/yujian.m4a" hidden=""></audio>
+	<canvas id="canvas">
 		
 	</canvas>
 	<script type="text/javascript">
+		var audio = document.querySelector("audio");
+		audio.paused = false;
+		audio.play();
 		var canvas;
 		var ctx;
 		var w;
 		var h;
 		var img = new Image();
 		var starImg = new Image();
+		var bgImg = new Image();
 		var num = 60;
 		var stars = [];
 		var lastTime;
 		var deltaTime;
-		var isInImg = false;
+		var isInImg = true;
 		var globalAlpha = 0;
+		var showImg = false;
+		var time = Date.now();
+		var showCount = 1;
+		var imgAlpha = 0;
+		var r = 720/960;
 		var starObj = function() {
 			this.x;
 			this.y;
@@ -31,8 +55,8 @@
 		starObj.prototype.init = function(){ 
 			//指定随机数
 			//Math.floor(Math.random()*(max - min + 1) + min)
-			this.x = Math.floor(Math.random() * (640 + 1) + 80);
-			this.y = Math.floor(Math.random() * (400 + 1) + 200);
+			this.x = Math.floor(Math.random() * w);
+			this.y = Math.floor(Math.random() * h);
 			this.starNum = Math.floor(Math.random()*7);
 			this.timer = 0;
 			this.xSpd = Math.random()*3 - 1.5;
@@ -42,7 +66,7 @@
 			this.timer += deltaTime;
 			this.x += this.xSpd * deltaTime * 0.009;
 			this.y += this.ySpd * deltaTime * 0.009;
-			if(this.x < 80 || this.x > 720 || this.y < 200 || this.y > 600) {
+			if(this.x < 0 || this.x > w || this.y < 0 || this.y > h) {
 				this.init();
 				return;
 			}
@@ -65,22 +89,23 @@
 		function init() {
 			canvas = document.querySelector("#canvas");
 			ctx = canvas.getContext("2d");
-			w = canvas.width;
-			h = canvas.height;
-			img.src = "./images/kakaxi.jpg";
+			w = canvas.width = document.body.clientWidth;
+			h = canvas.height = document.body.clientHeight;
+			img.src = "./images/baobao.jpg";
 			starImg.src = "./images/star.png";
+			bgImg.src = "./images/bg.jpg";
 			lastTime = Date.now();
-			canvas.addEventListener("mousemove", function(){
-				var event = event || window.event;
-				var x = event.offsetX;
-				var y = event.offsetY;
-				if(x >= 80 && x <= 720 && y >= 200 && y <= 600) {
-					isInImg = true;
-				}else {
-					isInImg = false;
-				}
+			// canvas.addEventListener("mousemove", function(){
+			// 	var event = event || window.event;
+			// 	var x = event.offsetX;
+			// 	var y = event.offsetY;
+			// 	if(x >= 80 && x <= 720 && y >= 200 && y <= 600) {
+			// 		isInImg = true;
+			// 	}else {
+			// 		isInImg = false;
+			// 	}
 				
-			})
+			// })
 			for(var i = 0; i < num; i++) {
 				stars.push(new starObj);
 				stars[i].init();
@@ -88,8 +113,9 @@
 			gameloop();
 		}
 		function drawBackground() {
-			ctx.fillStyle = "#393550";//填充颜色
-			ctx.fillRect(0, 0, w, h);
+			// ctx.fillStyle = "#393550";//填充颜色
+			// ctx.fillRect(0, 0, w, h);
+			ctx.drawImage(bgImg, 0, 0, w, h);
 		}
 		function gameloop() {
 			var now = Date.now();
@@ -99,12 +125,34 @@
 			drawBackground();
 			drawImg();
 			drawStars();
+			drawText();
 			aliveUpdate();
 		}
 		function drawImg() {
-			//drawImage(img, x, y, width, height)
-			//x轴正方向向右,y轴正方向向下,(0,0)在canvas左上角
-			ctx.drawImage(img, 80, 200, 640, 400);
+			var cTime = Date.now();
+			if(cTime - time >= 1000 *6 * showCount) {
+				ctx.save();
+				imgAlpha+=0.02;
+				ctx.globalAlpha = imgAlpha;
+				// time = cTime;
+				//drawImage(img, x, y, width, height)
+				//x轴正方向向右,y轴正方向向下,(0,0)在canvas左上角
+				// ctx.drawImage(img, 80, 200, 640, 400);
+				ctx.drawImage(img, w*0.2, 100, w*0.6,(w *0.6 )/r);
+				ctx.restore();
+
+			}
+		
+		}
+		function drawText() {
+			if(imgAlpha >=1 ) {
+				ctx.save();
+				ctx.fillStyle= "pink";
+				ctx.font="30px Arial";
+				ctx.fillText("爱你哦宝宝!", w*0.2,(w *0.6 )/r + 140);
+				ctx.restore();
+			}
+			
 		}
 		function drawStars() {
 			for(var i = 0; i < num; i++) {
